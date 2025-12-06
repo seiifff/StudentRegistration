@@ -1,19 +1,59 @@
-# StudentRegistrationApp (SQL Express + Dashboard-style UI)
+# StudentRegistrationApp  
+(SQL Express + ASP.NET MVC + Dashboard UI)
 
-- ASP.NET Core MVC (.NET 8)
-- Entity Framework Core with SQL Server provider
-- Database: MS SQL Express (Server=.\SQLEXPRESS; Database=StudentRegistrationDb)
-- Features:
-  - Register students
-  - Define courses
-  - Map students to multiple courses
-  - Modern, card-based layout inspired by course dashboards
+A modern, user-friendly Student Registration Web Application built using **ASP.NET Core MVC**, **SQL Express**, and **Entity Framework Core**.  
+The system allows students to register, log in, enroll in courses, view upcoming lessons, manage profiles, and interact with a clean dashboard-style UI.
 
-To run:
+---
 
-```bash
-dotnet restore
-dotnet run
-```
+## ✨ Features
 
-Ensure SQL Server Express is installed and the SQLEXPRESS instance is running.
+### 👤 Student Management
+- Student registration & login  
+- Secure password hashing (SHA-256)  
+- Profile page with student info  
+- Ability to edit email and password  
+- Profile avatar displayed on dashboard  
+
+### 📚 Course Enrollment System
+- View all available courses  
+- Enroll or un-enroll from multiple courses  
+- “My Courses” dashboard widget  
+- Automatic upcoming lessons section  
+
+### 🖥 Dashboard UI (Modern Design)
+- Four main dashboard cards:
+  - **Profile**
+  - **Total Lessons**
+  - **Quick Study Tools / Upcoming Exams**
+  - **Overview**
+- Floating card effects  
+- Light mode interface  
+- Sidebar navigation  
+- Clean typography and spacing  
+
+### 🗄 Database (SQL Express)
+- Students table  
+- Courses table  
+- StudentCourses (Many-to-Many)  
+- Migrations enabled  
+- Auto-seeding sample data  
+
+---
+
+## 🏗️ Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Backend | ASP.NET Core MVC 7 |
+| Database | SQL Server Express |
+| ORM | Entity Framework Core |
+| Frontend | Razor Views, HTML, CSS |
+| Authentication | Custom login (SHA-256 hashing) |
+| Hosting | Local development / IIS-ready |
+| Version Control | Git + GitHub |
+
+---
+
+## 📁 Project Structure
+
