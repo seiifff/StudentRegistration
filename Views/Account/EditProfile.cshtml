@@ -1,0 +1,202 @@
+@model StudentRegistrationApp.Models.Student
+@{
+    Layout = "_Layout_Login";
+    ViewData["Title"] = "Edit Profile";
+}
+
+@section Head {
+<style>
+    body {
+        background: #f3f4f6 !important;
+        font-family: 'Segoe UI', sans-serif;
+        color: #111827;
+    }
+
+    .auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .auth-shell {
+        width: 100%;
+        max-width: 920px;
+        min-height: 460px;
+        border-radius: 24px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1.05fr 1.2fr;
+        box-shadow: 0 20px 50px rgba(148, 163, 184, 0.40);
+        background: #ffffff;
+    }
+
+    .auth-left {
+        padding: 34px 40px;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #111827;
+    }
+
+    .auth-left-header h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .auth-left-header p {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 18px;
+    }
+
+    .auth-field {
+        margin-bottom: 14px;
+    }
+
+    .auth-field label {
+        font-size: 13px;
+        margin-bottom: 4px;
+        display: block;
+        color: #374151;
+    }
+
+    .auth-field input {
+        width: 100%;
+        padding: 9px 11px;
+        border-radius: 10px;
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        color: #111827;
+        font-size: 14px;
+    }
+
+    .auth-field input:focus {
+        outline: none;
+        border-color: #f97316;
+        box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.35);
+    }
+
+    .auth-btn {
+        width: 100%;
+        padding: 11px;
+        background: #f97316;
+        border-radius: 999px;
+        border: none;
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 12px;
+        font-size: 14px;
+    }
+
+    .auth-btn:hover {
+        background: #ea580c;
+    }
+
+    .auth-bottom-text {
+        margin-top: 12px;
+        font-size: 12px;
+        text-align: center;
+        color: #6b7280;
+    }
+
+    .auth-bottom-text a {
+        color: #f97316;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .auth-right {
+        background: linear-gradient(135deg, #ffedd5, #fefce8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
+
+    .auth-right img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .auth-errors {
+        background:#fef2f2;
+        color:#b91c1c;
+        font-size:12px;
+        padding:8px 10px;
+        border-radius:8px;
+        margin-bottom:10px;
+    }
+
+    @@media (max-width: 900px) {
+        .auth-shell {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-right {
+            display: none;
+        }
+    }
+</style>
+}
+
+<div class="auth-wrapper">
+    <div class="auth-shell">
+
+        <!-- LEFT: FORM -->
+        <div class="auth-left">
+            <div class="auth-left-header">
+                <h1>Edit Profile</h1>
+                <p>Update your email and change your password.</p>
+            </div>
+
+            @if (ViewData.ModelState.ErrorCount > 0)
+            {
+                <div class="auth-errors">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <div>@error.ErrorMessage</div>
+                    }
+                </div>
+            }
+
+            <form asp-action="EditProfile" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div class="auth-field">
+                    <label>Email</label>
+                    <input type="email" name="email" value="@Model.Email" required />
+                </div>
+
+                <div class="auth-field">
+                    <label>New Password (leave blank to keep current)</label>
+                    <input type="password" name="newPassword" />
+                </div>
+
+                <div class="auth-field">
+                    <label>Confirm New Password</label>
+                    <input type="password" name="confirmPassword" />
+                </div>
+
+                <button class="auth-btn">Save changes</button>
+            </form>
+
+            <div class="auth-bottom-text">
+                Back to dashboard? <a href="/Students/Index">Go home</a>
+            </div>
+        </div>
+
+        <!-- RIGHT: IMAGE (same as login/register) -->
+        <div class="auth-right">
+            <img src="~/images/image.png" alt="Edit profile illustration" />
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,316 @@
+@model IEnumerable<StudentRegistrationApp.Models.Course>
+
+@{
+    ViewData["Title"] = "Courses";
+    var enrolledIds = ViewBag.EnrolledIds as List<int> ?? new List<int>();
+    int studentId = ViewBag.StudentId ?? 0;
+    int colorIndex = 0;
+}
+
+@section Head {
+<style>
+    body {
+        background: #ffffff !important;
+        color: #fff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-container {
+        padding: 30px 50px;
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #111827;
+    }
+
+    .floating-card {
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        position: relative;
+    }
+
+    .floating-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 28px 70px rgba(0,0,0,0.35);
+    }
+
+    .courses-banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 28px;
+        border-radius: 26px;
+        background: radial-gradient(circle at top left, #f97316 0, #ffffff 70%);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+        margin-bottom: 32px;
+        gap: 24px;
+        color: #111827;
+    }
+
+    .courses-banner-left {
+        max-width: 420px;
+    }
+
+    .courses-banner-left h2 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .courses-banner-left p {
+        font-size: 14px;
+        color: #4b5563;
+        margin-bottom: 12px;
+    }
+
+    .courses-count-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: #f97316;
+        font-size: 12px;
+        color: #fffbeb;
+    }
+
+    .courses-count-pill span:first-child {
+        width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .courses-banner-right {
+        flex: 1;
+        text-align: right;
+        font-size: 42px;
+        opacity: 0.25;
+        color: #f97316;
+    }
+
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 22px;
+        margin-bottom: 35px;
+    }
+
+    .course-card {
+        border-radius: 22px;
+        padding: 20px 20px 18px;
+        box-shadow: 0 16px 45px rgba(0,0,0,0.25);
+        border: 1px solid rgba(15,23,42,0.12);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #f9fafb;
+    }
+
+    .course-card.grade-1 {
+        background: radial-gradient(circle at top left, #f97316 0, #ffffff 70%);
+        color: #111827;
+    }
+
+    .course-card.grade-2 {
+        background: radial-gradient(circle at top left, #22c55e 0, #ffffff 70%);
+        color: #111827;
+    }
+
+    .course-card.grade-3 {
+        background: radial-gradient(circle at top left, #6366f1 0, #ffffff 70%);
+        color: #111827;
+    }
+
+    .course-tag {
+        display: inline-block;
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(15,23,42,0.06);
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .course-name {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .course-code {
+        font-size: 12px;
+        color: #4b5563;
+        margin-bottom: 10px;
+        opacity: 0.9;
+    }
+
+    .course-meta {
+        font-size: 13px;
+        color: #111827;
+        margin-bottom: 10px;
+    }
+
+    .course-start {
+        font-size: 12px;
+        color: #f97316;
+    }
+
+    .course-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 14px;
+        gap: 8px;
+    }
+
+    .course-enroll-btn {
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: #f97316;
+        border: none;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .course-enroll-btn:hover {
+        background: #ea580c;
+    }
+
+    .course-enroll-btn.unenroll {
+        background: transparent;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+    }
+
+    .course-enroll-btn.unenroll:hover {
+        background: #fee2e2;
+    }
+
+    .course-view-link {
+        font-size: 12px;
+        color: #4b5563;
+        text-decoration: none;
+        opacity: 0.9;
+    }
+
+    .course-view-link:hover {
+        text-decoration: underline;
+    }
+
+    .success-banner {
+        margin-bottom: 16px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: #dcfce7;
+        border: 1px solid #4ade80;
+        font-size: 13px;
+        color: #166534;
+    }
+</style>
+}
+
+<div class="page-container">
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success-banner floating-card">
+            ✅ @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="courses-banner floating-card">
+        <div class="courses-banner-left">
+            <h2>Browse available courses</h2>
+            <p>Enroll or disenroll directly and manage your learning from one place.</p>
+
+            <div class="courses-count-pill">
+                <span>📚</span>
+                <span>@Model.Count() courses available this term</span>
+            </div>
+        </div>
+
+        <div class="courses-banner-right">
+            COURSES
+        </div>
+    </div>
+
+    <h1>Courses</h1>
+
+    <div class="courses-grid">
+        @foreach (var course in Model)
+        {
+            colorIndex++;
+
+            string gradeClass;
+            if (colorIndex % 3 == 1)
+            {
+                gradeClass = "grade-1";
+            }
+            else if (colorIndex % 3 == 2)
+            {
+                gradeClass = "grade-2";
+            }
+            else
+            {
+                gradeClass = "grade-3";
+            }
+
+            bool isEnrolled = enrolledIds.Contains(course.Id);
+
+            <div class="course-card floating-card @gradeClass">
+                <div>
+                    <div class="course-tag">Course</div>
+                    <div class="course-name">@course.CourseName</div>
+                    <div class="course-code">@course.CourseCode</div>
+
+                    <div class="course-meta">
+                        Lecturer: <strong>@course.Lecturer</strong>
+                    </div>
+
+                    <div class="course-start">
+                        Starts on @course.StartDate.ToString("yyyy-MM-dd")
+                    </div>
+                </div>
+
+                <div class="course-actions">
+                    @if (!isEnrolled)
+                    {
+                        <form asp-action="EnrollSingle" method="post" style="margin:0;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="studentId" value="@studentId" />
+                            <input type="hidden" name="courseId" value="@course.Id" />
+                            <button type="submit" class="course-enroll-btn">
+                                Enroll
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="UnenrollSingle" method="post" style="margin:0;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="studentId" value="@studentId" />
+                            <input type="hidden" name="courseId" value="@course.Id" />
+                            <button type="submit" class="course-enroll-btn unenroll">
+                                Disenroll
+                            </button>
+                        </form>
+                    }
+
+                    <a href="#" class="course-view-link">
+                        View details
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

@@ -1,0 +1,187 @@
+@{
+    Layout = "_Layout_Login";
+    ViewData["Title"] = "Register";
+}
+
+@section Head {
+<style>
+    body {
+        background: #f3f4f6 !important;
+        font-family: 'Segoe UI', sans-serif;
+        color: #111827;
+    }
+
+    .auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .auth-shell {
+        width: 100%;
+        max-width: 920px;
+        min-height: 460px;
+        border-radius: 24px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1.05fr 1.2fr;
+        box-shadow: 0 20px 50px rgba(148, 163, 184, 0.40);
+        background: #ffffff;
+    }
+
+    .auth-left {
+        padding: 34px 40px;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #111827;
+    }
+
+    .auth-left-header h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .auth-left-header p {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 18px;
+    }
+
+    .auth-field {
+        margin-bottom: 14px;
+    }
+
+    .auth-field label {
+        font-size: 13px;
+        margin-bottom: 4px;
+        display: block;
+        color: #374151;
+    }
+
+    .auth-field input {
+        width: 100%;
+        padding: 9px 11px;
+        border-radius: 10px;
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        color: #111827;
+        font-size: 14px;
+    }
+
+    .auth-field input:focus {
+        outline: none;
+        border-color: #f97316;
+        box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.35);
+    }
+
+    .auth-btn {
+        width: 100%;
+        padding: 11px;
+        background: #f97316;
+        border-radius: 999px;
+        border: none;
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 12px;
+        font-size: 14px;
+    }
+
+    .auth-btn:hover {
+        background: #ea580c;
+    }
+
+    .auth-bottom-text {
+        margin-top: 12px;
+        font-size: 12px;
+        text-align: center;
+        color: #6b7280;
+    }
+
+    .auth-bottom-text a {
+        color: #f97316;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .auth-right {
+        background: linear-gradient(135deg, #ffedd5, #fefce8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
+
+    .auth-right img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    @@media (max-width: 900px) {
+        .auth-shell {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-right {
+            display: none;
+        }
+    }
+</style>
+}
+
+<div class="auth-wrapper">
+    <div class="auth-shell">
+
+        <!-- LEFT -->
+        <div class="auth-left">
+            <div class="auth-left-header">
+                <h1>Sign Up</h1>
+                <p>Create your student account</p>
+            </div>
+
+            <form asp-action="Register" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="auth-field">
+                    <label>Full Name</label>
+                    <input type="text" name="fullName" required />
+                </div>
+
+                <div class="auth-field">
+                    <label>Email</label>
+                    <input type="email" name="email" required />
+                </div>
+
+                <div class="auth-field">
+                    <label>Password</label>
+                    <input type="password" name="password" required />
+                </div>
+
+                <div class="auth-field">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirmPassword" required />
+                </div>
+
+                <button class="auth-btn">Create Account</button>
+            </form>
+
+            <div class="auth-bottom-text">
+                Already have an account?
+                <a href="/Account/Login">Login</a>
+            </div>
+        </div>
+
+        <!-- RIGHT IMAGE -->
+        <div class="auth-right">
+            <img src="~/images/image.png" alt="Registration illustration" />
+        </div>
+
+    </div>
+</div>

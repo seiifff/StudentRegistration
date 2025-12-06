@@ -1,0 +1,98 @@
+@model int
+@using StudentRegistrationApp.Models
+
+@{
+    ViewData["Title"] = "Enroll in courses";
+    var courses = ViewBag.Courses as IEnumerable<Course> ?? Enumerable.Empty<Course>();
+}
+
+<div style="padding:32px 40px;max-width:1200px;margin:0 auto;">
+    <h1 style="font-size:28px;font-weight:700;margin-bottom:8px;">Enroll in courses</h1>
+    <p style="font-size:14px;color:#6b7280;margin-bottom:20px;">
+        Choose the courses you want to study. Your dashboard will update automatically.
+    </p>
+
+    <form asp-action="Enroll" method="post">
+        <input type="hidden" name="studentId" value="@Model" />
+
+        <!-- course cards grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:24px;">
+            @foreach (var course in courses)
+            {
+                <label style="
+                        display:flex;
+                        flex-direction:column;
+                        justify-content:space-between;
+                        border-radius:22px;
+                        padding:18px 18px 14px 18px;
+                        cursor:pointer;
+                        border:2px solid transparent;
+                        box-shadow:0 18px 35px rgba(15,23,42,0.22);
+                        background:linear-gradient(135deg,#1d4ed8,#0ea5e9);
+                        color:#f9fafb;
+                        transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;">
+                    <input type="checkbox"
+                           name="selectedCourses"
+                           value="@course.Id"
+                           style="position:absolute;opacity:0;pointer-events:none;" />
+
+                    <div style="margin-bottom:10px;">
+                        <span style="display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(15,23,42,0.35);font-size:11px;text-transform:uppercase;letter-spacing:.12em;">
+                            @course.CourseCode
+                        </span>
+                        <h3 style="font-size:18px;font-weight:700;margin:10px 0 4px 0;">
+                            @course.CourseName
+                        </h3>
+                        <p style="font-size:13px;margin:0;opacity:.9;">
+                            Lecturer: <strong>@course.Lecturer</strong><br />
+                            Starts: <strong>@course.StartDate.ToString("yyyy-MM-dd")</strong>
+                        </p>
+                    </div>
+
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                        <span style="font-size:12px;opacity:.9;">Tap to select / unselect</span>
+                        <span style="
+                                width:20px;height:20px;border-radius:999px;
+                                border:2px solid rgba(248,250,252,0.85);
+                                display:inline-flex;align-items:center;justify-content:center;
+                                background:rgba(15,23,42,0.2);">
+                            <span style="width:10px;height:10px;border-radius:999px;background:#facc15;"></span>
+                        </span>
+                    </div>
+                </label>
+            }
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+            <a asp-controller="Students" asp-action="Index"
+               style="font-size:13px;padding:8px 14px;border-radius:999px;border:1px solid #d1d5db;text-decoration:none;color:#374151;background:#f9fafb;">
+                ⬅ Back to dashboard
+            </a>
+
+            <button type="submit"
+                    style="border:none;outline:none;padding:10px 22px;border-radius:999px;
+                           background:#22c55e;color:#022c22;font-size:14px;font-weight:600;
+                           cursor:pointer;box-shadow:0 10px 25px rgba(22,163,74,0.55);">
+                Save enrollment
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+// simple visual 'selected' effect
+document.querySelectorAll("label[style*='cursor:pointer']").forEach(label => {
+    const input = label.querySelector("input[type='checkbox']");
+    label.addEventListener("click", () => {
+        setTimeout(() => {
+            if (input.checked) {
+                label.style.borderColor = "#fbbf24";
+                label.style.transform = "translateY(-3px)";
+            } else {
+                label.style.borderColor = "transparent";
+                label.style.transform = "translateY(0px)";
+            }
+        }, 0);
+    });
+});
+</script>

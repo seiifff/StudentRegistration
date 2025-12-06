@@ -1,0 +1,405 @@
+@model StudentRegistrationApp.Models.Student
+
+@{
+    ViewData["Title"] = "My courses";
+
+    var upcomingMini = Model.StudentCourses
+        .Select(sc => sc.Course)
+        .OrderBy(c => c.StartDate)
+        .Take(3)
+        .ToList();
+}
+
+@section Head {
+<style>
+    body {
+        background: #ffffff !important;
+        color: #fff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-container {
+        padding: 30px 50px;
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #111827;
+    }
+
+    .floating-card {
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        position: relative;
+    }
+
+    .floating-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 28px 70px rgba(0,0,0,0.35);
+    }
+
+    .welcome-banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 26px 32px;
+        border-radius: 28px;
+        background: radial-gradient(circle at top left, #f97316 0, #ffffff 70%);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+        margin-bottom: 32px;
+        overflow: hidden;
+        gap: 24px;
+        color: #111827;
+    }
+
+    .welcome-text {
+        max-width: 420px;
+    }
+
+    .welcome-text h2 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .welcome-text p {
+        font-size: 14px;
+        color: #4b5563;
+        margin-bottom: 14px;
+    }
+
+    .welcome-stat {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: #f97316;
+        font-size: 12px;
+        color: #fffbeb;
+    }
+
+    .welcome-stat span:first-child {
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    .welcome-image-wrapper {
+        flex: 1;
+        max-width: 380px;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+        background: #111827;
+    }
+
+    .welcome-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .card-row {
+        display: flex;
+        gap: 22px;
+        margin-bottom: 40px;
+    }
+
+    .dashboard-card {
+        flex: 1;
+        padding: 24px 24px 22px;
+        border-radius: 24px;
+        color: #ffffff;
+        box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+    }
+
+    .blue-card {
+        background: radial-gradient(circle at top left, #60a5fa 0, #ffffff 70%);
+        color: #0f172a;
+    }
+
+    .orange-card {
+        background: radial-gradient(circle at top left, #fb923c 0, #ffffff 70%);
+        color: #0f172a;
+    }
+
+    .dark-card {
+        background: radial-gradient(circle at top left, #4b5563 0, #ffffff 70%);
+        color: #0f172a;
+    }
+
+    .green-card {
+        background: radial-gradient(circle at top left, #34d399 0, #ffffff 70%);
+        color: #0f172a;
+    }
+
+    .dashboard-card small {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 11px;
+        background: rgba(15,23,42,0.06);
+        color: #374151;
+        margin-bottom: 12px;
+    }
+
+    .dashboard-card h3 {
+        font-size: 21px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .dashboard-card p,
+    .dashboard-card ul {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #111827;
+    }
+
+    .dashboard-card ul {
+        padding-left: 18px;
+    }
+
+    .btn-pill-dark {
+        background: #111827;
+        padding: 10px 18px;
+        border-radius: 999px;
+        color: #ffffff;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 16px;
+        font-size: 13px;
+    }
+
+    .btn-pill-dark:hover {
+        opacity: 0.9;
+    }
+
+    .progress-track {
+        height: 6px;
+        background: rgba(148,163,184,0.35);
+        border-radius: 999px;
+        overflow: hidden;
+        margin: 8px 0 6px;
+    }
+
+    .progress-fill-blue {
+        height: 100%;
+        width: 80%;
+        background: #3b82f6;
+    }
+
+    .progress-fill-orange {
+        height: 100%;
+        width: 42%;
+        background: #f97316;
+    }
+
+    .lessons-box {
+        background: #f5f5f5;
+        padding: 26px 28px;
+        border-radius: 22px;
+        margin-top: 10px;
+        box-shadow: 0 16px 35px rgba(0,0,0,0.18);
+        color: #111827;
+        border: 1px solid #e5e7eb;
+    }
+
+    .lessons-box h2 {
+        margin: 0 0 4px;
+        font-size: 20px;
+    }
+
+    .lessons-box p {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 16px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #111827;
+        font-size: 14px;
+    }
+
+    thead {
+        text-align: left;
+    }
+
+    thead th {
+        padding-bottom: 8px;
+        border-bottom: 1px solid #d1d5db;
+        color: #4b5563;
+    }
+
+    tbody td {
+        padding: 9px 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .mini-upcoming-list {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 10px;
+        font-size: 13px;
+    }
+
+    .mini-upcoming-list li {
+        margin-bottom: 6px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .mini-upcoming-course {
+        font-weight: 500;
+        color: #111827;
+    }
+
+    .mini-upcoming-date {
+        color: #f97316;
+        font-size: 12px;
+    }
+</style>
+}
+
+<div class="page-container">
+
+    <div class="welcome-banner floating-card">
+        <div class="welcome-text">
+            <h2>Welcome back, @Model.FullName!</h2>
+            <p>Here’s a quick snapshot of your profile, enrolled courses and upcoming exams.</p>
+
+            <div class="welcome-stat">
+                <span>🔥</span>
+                <span>
+                    You’re enrolled in <strong>@Model.StudentCourses.Count</strong> course(s).
+                    Stay on track and prepare for your upcoming exams.
+                </span>
+            </div>
+        </div>
+
+        <div class="welcome-image-wrapper">
+            <img src="~/images/image.png" alt="Welcome student illustration" />
+        </div>
+    </div>
+
+    <h1>My courses</h1>
+
+    <div class="card-row">
+        <!-- PROFILE CARD WITH AVATAR -->
+        <div class="dashboard-card blue-card floating-card">
+            <small>PROFILE</small>
+
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                <img src="~/images/avatar.png"
+                     alt="Student avatar"
+                     style="width:56px;height:56px;border-radius:999px;border:2px solid #e5e7eb;background:#111827;" />
+                <div>
+                    <div style="font-weight:600;">@Model.FullName</div>
+                    <div style="font-size:13px;color:#4b5563;">@Model.Email</div>
+                </div>
+            </div>
+
+            <p>Reg. No: <strong>@Model.RegistrationNumber</strong></p>
+
+            <p style="margin-top: 8px;">Profile completion</p>
+            <div class="progress-track">
+                <div class="progress-fill-blue"></div>
+            </div>
+            <p style="font-size: 12px; margin-top: 2px; color:#4b5563;">Estimated 80% complete</p>
+
+            <a href="/Account/EditProfile" class="btn-pill-dark">Edit profile</a>
+        </div>
+
+        <!-- COURSES SUMMARY -->
+        <div class="dashboard-card orange-card floating-card">
+            <small>COURSES</small>
+            <h3>Enrolled courses</h3>
+            <p>You are enrolled in @Model.StudentCourses.Count course(s).</p>
+
+            <p style="margin-top: 10px;">Study progress</p>
+            <div class="progress-track">
+                <div class="progress-fill-orange"></div>
+            </div>
+            <p style="font-size: 12px; margin-top: 2px; color:#4b5563;">
+                Keep completing your lessons to improve this.
+            </p>
+
+            <a href="/Courses/Index" class="btn-pill-dark">Go to courses</a>
+        </div>
+
+        <!-- UPCOMING EXAMS -->
+        <div class="dashboard-card dark-card floating-card">
+            <small>UPCOMING EXAMS</small>
+            <h3>Next key dates</h3>
+
+            @if (upcomingMini.Any())
+            {
+                <ul class="mini-upcoming-list">
+                    @foreach (var c in upcomingMini)
+                    {
+                        <li>
+                            <span class="mini-upcoming-course">@c.CourseName</span>
+                            <span class="mini-upcoming-date">@c.StartDate.ToString("dd MMM")</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p style="font-size:13px;margin-top:8px;">
+                    You don’t have any upcoming exams yet. Enroll in courses to see them here.
+                </p>
+            }
+
+            <a href="#" class="btn-pill-dark">View full exam schedule</a>
+        </div>
+
+        <!-- OVERVIEW -->
+        <div class="dashboard-card green-card floating-card">
+            <small>OVERVIEW</small>
+            <h3>Your student portal</h3>
+            <ul style="margin-top: 8px;">
+                <li>View & update your student profile</li>
+                <li>Enroll in and manage multiple courses</li>
+                <li>See upcoming exams and class dates</li>
+                <li>Track learning activity from one place</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="lessons-box floating-card">
+        <h2>My next lessons</h2>
+        <p>Automatically filled from your enrolled courses.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Lesson</th>
+                    <th>Teacher</th>
+                    <th>Start date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var course in Model.StudentCourses.Select(sc => sc.Course).OrderBy(c => c.StartDate))
+                {
+                    <tr>
+                        <td>@course.CourseName</td>
+                        <td>@course.Lecturer</td>
+                        <td>@course.StartDate.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

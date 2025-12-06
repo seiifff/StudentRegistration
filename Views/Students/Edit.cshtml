@@ -1,0 +1,65 @@
+@model StudentRegistrationApp.Models.Student
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Edit Student";
+    var courses = ViewBag.Courses as MultiSelectList;
+}
+
+<div class="page-wrapper">
+
+    <h2 class="main-title mb-3">Edit Student</h2>
+
+    <div class="panel-card">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="FullName" class="form-label fw-semibold"></label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+
+
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label fw-semibold"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Select Courses</label>
+                    <div class="course-checkboxes">
+                        @if (courses != null)
+                        {
+                            @foreach (var course in courses)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="selectedCourses" value="@course.Value" id="course_@course.Value" 
+                                           @(course.Selected ? "checked" : "") />
+                                    <label class="form-check-label" for="course_@course.Value">
+                                        @course.Text
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <small class="text-muted d-block mt-2">Select as many courses as you want</small>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-3">
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+                <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

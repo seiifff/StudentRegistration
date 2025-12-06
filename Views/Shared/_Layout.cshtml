@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Student Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+            color: #111827;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* LIGHT SIDEBAR */
+        .sidebar {
+            width: 80px;
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 0;
+            box-shadow: 6px 0 20px rgba(15, 23, 42, 0.05);
+        }
+
+        .sidebar-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #f97316;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 28px;
+            font-size: 20px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar-link {
+            width: 42px;
+            height: 42px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            text-decoration: none;
+            background: transparent;
+            transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease, color 0.2s ease;
+            font-size: 18px;
+        }
+
+        .sidebar-link:hover {
+            background: #fef3c7;
+            color: #f97316;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(148, 163, 184, 0.4);
+        }
+
+        .sidebar-link.active {
+            background: #f97316;
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(248, 113, 22, 0.5);
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            margin-bottom: 8px;
+        }
+
+        .main-content {
+            flex: 1;
+        }
+    </style>
+
+    @RenderSection("Head", required: false)
+</head>
+<body>
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                🎓
+            </div>
+
+            <nav class="sidebar-nav">
+                <!-- DASHBOARD -->
+                <a asp-controller="Students" asp-action="Index"
+                   class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Students" ? "active" : "")"
+                   title="Dashboard">
+                    🏠
+                </a>
+
+                <!-- COURSES -->
+                <a asp-controller="Courses" asp-action="Index"
+                   class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Courses" ? "active" : "")"
+                   title="Courses">
+                    📚
+                </a>
+            </nav>
+
+            <!-- LOGOUT -->
+            <div class="sidebar-bottom">
+                <a asp-controller="Account" asp-action="Logout" class="sidebar-link" title="Logout">
+                    ⏻
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
