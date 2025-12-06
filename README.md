@@ -56,4 +56,29 @@ The system allows students to register, log in, enroll in courses, view upcoming
 ---
 
 ## 📁 Project Structure
+StudentRegistrationApp/
+├── Controllers/
+│ ├── AccountController.cs
+│ ├── CoursesController.cs
+│ └── StudentsController.cs
+│
+├── Models/
+│ ├── Student.cs
+│ ├── Course.cs
+│ └── StudentCourse.cs
+│
+├── Views/
+│ ├── Account/
+│ ├── Courses/
+│ ├── Students/
+│ └── Shared/
+│
+├── wwwroot/
+│ ├── css/
+│ └── images/
+│
+├── Program.cs
+├── appsettings.json
+├── StudentRegistrationApp.csproj
+└── DatabaseSchema.sql
 
